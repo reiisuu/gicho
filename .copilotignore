@@ -1,0 +1,49 @@
+# ---------------------------------------------------
+# AI CONTEXT IGNORE FILE
+# Prevents the AI from reading large/useless files 
+# and wasting your token limits.
+# ---------------------------------------------------
+
+# 1. Lockfiles (MASSIVE token eaters - do not let AI read these)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+
+# 2. Dependencies
+node_modules/
+
+# 3. Next.js Build Artifacts
+.next/
+out/
+build/
+dist/
+.vercel/
+
+# 4. Environment Variables (Security & irrelevant for logic)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 5. Media & Binary Files (AI can't read images)
+public/**/*.png
+public/**/*.jpg
+public/**/*.jpeg
+public/**/*.gif
+public/**/*.svg
+public/**/*.ico
+public/**/*.webp
+*.pdf
+*.mp4
+
+# 6. Git Internals
+.git/
+
+# 7. IDE Cache
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
