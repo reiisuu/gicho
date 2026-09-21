@@ -89,13 +89,13 @@ export default function BottomNavigation() {
               aria-current={isActive ? "page" : undefined}
               className={`flex min-h-16 flex-col items-center justify-center gap-1 px-2 py-2 text-xs font-semibold transition ${
                 isActive
-                  ? "text-gray-950"
-                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                  ? "text-slate-950"
+                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
               }`}
             >
               <span
                 className={`rounded-lg p-1 ${
-                  isActive ? "bg-gray-100" : ""
+                  isActive                   ? "bg-slate-100" : ""
                 }`}
               >
                 <NavigationIcon>{item.icon}</NavigationIcon>

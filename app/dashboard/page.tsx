@@ -81,11 +81,11 @@ export default function DashboardPage() {
   }, [timeframe]);
 
   return (
-    <main className="min-h-screen bg-gray-100 p-4 text-gray-900 sm:p-6">
+    <main className="min-h-screen bg-slate-100 p-4 text-slate-950 sm:p-6">
       <div className="mx-auto max-w-6xl space-y-5">
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-500">Gicho POS</p>
+            <p className="text-sm font-semibold text-slate-500">Gicho POS</p>
             <h1 className="text-3xl font-bold">Dashboard</h1>
           </div>
           <label className="text-sm font-semibold">
@@ -105,7 +105,13 @@ export default function DashboardPage() {
         </header>
 
         {error ? <p className="rounded-lg bg-red-50 p-3 text-red-700">{error}</p> : null}
-        {isLoading && !analytics ? <p>Loading analytics...</p> : null}
+        {isLoading && analytics ? (
+          <p className="flex items-center text-sm font-semibold text-slate-600">
+            <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-slate-900" />
+            Updating dashboard...
+          </p>
+        ) : null}
+        {isLoading && !analytics ? <p className="flex items-center font-semibold text-slate-600"><span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-slate-900" />Loading analytics...</p> : null}
 
         {analytics ? (
           <>

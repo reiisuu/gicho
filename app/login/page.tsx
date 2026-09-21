@@ -2,12 +2,14 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -53,17 +55,32 @@ export default function LoginPage() {
           <label htmlFor="password" className="font-medium text-gray-900">
             PIN or Password
           </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            autoComplete="current-password"
-            required
-            autoFocus
-            className="w-full rounded-lg border border-gray-300 px-4 py-3 text-lg outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
-          />
+          <div className="relative">
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="current-password"
+              required
+              autoFocus
+              className="min-h-14 w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pr-14 text-xl font-medium text-slate-900 outline-none placeholder:text-slate-500 focus:border-gray-900 focus:ring-2 focus:ring-gray-200"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((visible) => !visible)}
+              aria-label={showPassword ? "Hide PIN or password" : "Show PIN or password"}
+              aria-pressed={showPassword}
+              className="absolute inset-y-0 right-0 flex w-14 items-center justify-center rounded-r-lg text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-inset"
+            >
+              {showPassword ? (
+                <EyeOff aria-hidden="true" className="h-6 w-6" />
+              ) : (
+                <Eye aria-hidden="true" className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
 
         {error ? (

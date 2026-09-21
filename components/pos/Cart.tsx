@@ -11,6 +11,7 @@ type CartProps = {
   totalCents: number;
   onPaymentMethodChange: (method: PaymentMethod) => void;
   onAmountTenderedChange: (amountCents: number) => void;
+  onQuickCash: (amountCents: number, mode: "add" | "exact") => void;
   onReferenceNumberChange: (referenceNumber: string) => void;
   onIncrement: (productId: string) => void;
   onDecrement: (productId: string) => void;
@@ -34,6 +35,7 @@ export default function Cart({
   totalCents,
   onPaymentMethodChange,
   onAmountTenderedChange,
+  onQuickCash,
   onReferenceNumberChange,
   onIncrement,
   onDecrement,
@@ -45,13 +47,13 @@ export default function Cart({
     paymentMethod === "Cash" && amountTenderedCents < totalCents;
 
   return (
-    <section className="flex h-full flex-col rounded-xl bg-white p-4 shadow-sm">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-gray-900">Current Order</h2>
+    <section className="flex min-h-0 min-w-0 h-full max-w-full flex-col overflow-hidden rounded-xl bg-white p-2 shadow-sm sm:p-4">
+      <div className="mb-1 flex shrink-0 items-center justify-between sm:mb-4">
+        <h2 className="text-lg font-bold text-gray-900 sm:text-xl">Current Order</h2>
         <span className="text-sm text-gray-500">{items.length} item types</span>
       </div>
 
-      <div className="min-h-32 flex-1 space-y-3 overflow-y-auto">
+      <div className="custom-scrollbar min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
         {items.length === 0 ? (
           <p className="py-8 text-center text-gray-500">Tap a product to add it.</p>
         ) : (
@@ -63,20 +65,20 @@ export default function Cart({
                   {formatPrice(item.priceCents)} each
                 </p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <button
                   type="button"
                   onClick={() => onDecrement(item.id)}
-                  className="h-9 w-9 rounded-lg bg-gray-100 text-lg font-bold"
+                  className="h-8 w-8 rounded-lg bg-gray-100 text-base font-bold"
                   aria-label={`Decrease ${item.name}`}
                 >
                   -
                 </button>
-                <span className="w-5 text-center font-semibold">{item.quantity}</span>
+                <span className="w-4 text-center text-sm font-semibold">{item.quantity}</span>
                 <button
                   type="button"
                   onClick={() => onIncrement(item.id)}
-                  className="h-9 w-9 rounded-lg bg-gray-900 text-lg font-bold text-white"
+                  className="h-8 w-8 rounded-lg bg-gray-900 text-base font-bold text-white"
                   aria-label={`Increase ${item.name}`}
                 >
                   +
@@ -90,19 +92,19 @@ export default function Cart({
         )}
       </div>
 
-      <div className="mt-4 space-y-4 border-t border-gray-200 pt-4">
+      <div className="mt-1 shrink-0 space-y-1 border-t border-gray-200 pt-1 sm:mt-4 sm:space-y-4 sm:pt-4">
         <div>
-          <p className="mb-2 text-sm font-medium text-gray-700">Payment Method</p>
-          <div className="grid grid-cols-2 gap-2">
+          <p className="mb-1 text-xs font-medium text-gray-700 sm:text-sm sm:mb-2">Payment Method</p>
+          <div className="grid grid-cols-2 gap-1 sm:gap-2">
             {paymentMethods.map((method) => (
               <button
                 key={method}
                 type="button"
                 onClick={() => onPaymentMethodChange(method)}
-                className={`rounded-lg px-3 py-2 text-sm font-semibold ${
+                className={`rounded-lg px-2 py-0.5 text-xs font-semibold sm:px-3 sm:py-2 sm:text-sm ${
                   paymentMethod === method
-                    ? "bg-gray-900 text-white"
-                    : "bg-gray-100 text-gray-700"
+                    ? "bg-slate-900 text-white"
+                    : "bg-slate-100 text-slate-700"
                 }`}
               >
                 {method}
@@ -111,8 +113,8 @@ export default function Cart({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <label className="text-sm font-medium text-gray-700">
+        <div className="grid min-w-0 grid-cols-2 gap-1 sm:gap-3">
+          <label className="min-w-0 text-sm font-medium text-gray-700">
             Amount Received
             <input
               type="number"
@@ -127,14 +129,14 @@ export default function Cart({
                     : 0,
                 );
               }}
-              className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-lg text-gray-900"
+              className="mt-1 block min-w-0 max-w-full w-full rounded-lg border border-gray-300 px-2 py-0.5 text-base text-gray-900 sm:px-3 sm:py-2 sm:text-lg"
               placeholder="₱0.00"
             />
           </label>
-          <div>
+          <div className="min-w-0">
             <span className="text-sm font-medium text-gray-700">Change</span>
             <p
-              className={`mt-1 text-2xl font-bold ${
+              className={`mt-1 text-lg font-bold sm:text-2xl ${
                 insufficientCash ? "text-red-600" : "text-green-700"
               }`}
             >
@@ -143,15 +145,44 @@ export default function Cart({
           </div>
         </div>
 
+        {paymentMethod === "Cash" ? (
+          <div>
+            <p className="mb-1 text-xs font-bold text-slate-700 sm:mb-2 sm:text-sm">Quick Cash</p>
+            <div className="grid min-w-0 grid-cols-2 gap-1 sm:grid-cols-4 sm:gap-2">
+              {[
+                { label: "Exact", amount: totalCents },
+                { label: "₱100", amount: 10_000 },
+                { label: "₱500", amount: 50_000 },
+                { label: "₱1000", amount: 100_000 },
+              ].map((option) => (
+                <button
+                  key={option.label}
+                  type="button"
+                  onClick={() =>
+                    onQuickCash(
+                      option.amount,
+                      option.label === "Exact" ? "exact" : "add",
+                    )
+                  }
+                  className="min-h-7 min-w-0 max-w-full overflow-hidden text-ellipsis whitespace-nowrap rounded-lg border-2 border-emerald-200 bg-emerald-50 px-2 py-0.5 text-xs font-extrabold text-emerald-900 hover:bg-emerald-100 active:scale-95 sm:min-h-12 sm:rounded-xl sm:py-2 sm:text-sm"
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
         {paymentMethod !== "Cash" ? (
-          <div className="rounded-lg bg-gray-50 p-3">
-            <label className="block text-sm font-medium text-gray-700">
-              Reference Number <span className="font-normal text-gray-500">(Optional)</span>
+          <div className="min-w-0 max-w-full overflow-hidden rounded-lg bg-gray-50 p-2 sm:p-3">
+            <label className="block min-w-0 text-sm font-medium text-gray-700">
+              Reference Number{" "}
+              <span className="font-normal text-gray-500">(Optional)</span>
               <input
                 type="text"
                 value={referenceNumber}
                 onChange={(event) => onReferenceNumberChange(event.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-base text-gray-900"
+                className="mt-1 block min-w-0 max-w-full w-full rounded-lg border border-gray-300 px-2 py-1.5 text-base text-gray-900 sm:px-3 sm:py-2"
                 placeholder="Enter reference number"
               />
             </label>
@@ -159,15 +190,15 @@ export default function Cart({
         ) : null}
 
         <div className="flex items-center justify-between">
-          <span className="text-lg font-semibold text-gray-700">Total</span>
-          <span className="text-3xl font-bold text-gray-900">{formatPrice(totalCents)}</span>
+          <span className="text-base font-semibold text-gray-700 sm:text-lg">Total</span>
+          <span className="text-xl font-bold text-gray-900 sm:text-3xl">{formatPrice(totalCents)}</span>
         </div>
 
         <button
           type="button"
           onClick={onSubmit}
           disabled={isSaving || items.length === 0 || insufficientCash}
-          className="w-full rounded-xl bg-green-600 px-4 py-4 text-xl font-bold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+          className="w-full rounded-xl bg-slate-900 px-4 py-1.5 text-base font-bold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300 sm:py-4 sm:text-xl"
         >
           {isSaving ? "Saving..." : "Save Sale"}
         </button>
