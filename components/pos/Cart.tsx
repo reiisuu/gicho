@@ -49,13 +49,13 @@ export default function Cart({
     paymentMethod === "Cash" && amountTenderedCents < totalCents;
 
   return (
-    <section className="flex min-h-0 min-w-0 h-full max-w-full flex-col overflow-hidden rounded-xl bg-white p-2 shadow-sm sm:p-4">
-      <div className="mb-1 flex shrink-0 items-center justify-between sm:mb-4">
-        <h2 className="text-lg font-bold text-gray-900 sm:text-xl">Current Order</h2>
+    <section className="flex h-full flex-col rounded-xl bg-white p-4 shadow-sm">
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-xl font-bold text-gray-900">Current Order</h2>
         <span className="text-sm text-gray-500">{items.length} item types</span>
       </div>
 
-      <div className="custom-scrollbar min-h-0 flex-1 space-y-4 overflow-y-auto pr-1">
+      <div className="min-h-32 flex-1 space-y-4 overflow-y-auto">
         {items.length === 0 ? (
           <p className="py-10 text-center text-base text-gray-500">
             Tap a product to add it.
@@ -64,17 +64,17 @@ export default function Cart({
           items.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 shadow-sm sm:gap-4 sm:p-4"
+              className="flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 shadow-sm"
             >
               <div className="min-w-0 flex-1">
-                <p className="truncate text-base font-semibold text-gray-900 sm:text-lg">
+                <p className="truncate text-lg font-semibold text-gray-900">
                   {item.name}
                 </p>
-                <p className="mt-1 text-sm text-gray-600 sm:text-base">
+                <p className="mt-1 text-base text-gray-600">
                   {formatPrice(item.priceCents)} each
                 </p>
               </div>
-              <div className="flex shrink-0 items-center gap-2">
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => onDecrement(item.id)}
@@ -95,7 +95,7 @@ export default function Cart({
                   +
                 </button>
               </div>
-              <span className="w-24 shrink-0 text-right text-base font-bold text-gray-900 sm:text-lg">
+              <span className="w-24 text-right text-lg font-bold text-gray-900">
                 {formatPrice(item.priceCents * item.quantity)}
               </span>
             </div>
@@ -103,16 +103,16 @@ export default function Cart({
         )}
       </div>
 
-      <div className="mt-1 shrink-0 space-y-1 border-t border-gray-200 pt-1 sm:mt-4 sm:space-y-4 sm:pt-4">
+      <div className="mt-4 space-y-4 border-t border-gray-200 pt-4">
         <div>
-          <p className="mb-1 text-xs font-medium text-gray-700 sm:text-sm sm:mb-2">Payment Method</p>
-          <div className="grid grid-cols-2 gap-1 sm:gap-2">
+          <p className="mb-2 text-sm font-medium text-gray-700">Payment Method</p>
+          <div className="grid grid-cols-2 gap-2">
             {paymentMethods.map((method) => (
               <button
                 key={method}
                 type="button"
                 onClick={() => onPaymentMethodChange(method)}
-                className={`rounded-lg px-2 py-0.5 text-xs font-semibold sm:px-3 sm:py-2 sm:text-sm ${
+                className={`rounded-lg px-3 py-2 text-sm font-semibold ${
                   paymentMethod === method
                     ? "bg-slate-900 text-white"
                     : "bg-slate-100 text-slate-700"
@@ -124,8 +124,8 @@ export default function Cart({
           </div>
         </div>
 
-        <div className="grid min-w-0 grid-cols-2 gap-1 sm:gap-3">
-          <label className="min-w-0 text-sm font-medium text-gray-700">
+        <div className="grid grid-cols-2 gap-3">
+          <label className="text-sm font-medium text-gray-700">
             Amount Received
             <input
               type="number"
@@ -140,14 +140,14 @@ export default function Cart({
                     : 0,
                 );
               }}
-              className="mt-1 block min-w-0 max-w-full w-full rounded-lg border border-gray-300 px-2 py-0.5 text-base text-gray-900 sm:px-3 sm:py-2 sm:text-lg"
+              className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-lg text-gray-900"
               placeholder="₱0.00"
             />
           </label>
-          <div className="min-w-0">
+          <div>
             <span className="text-sm font-medium text-gray-700">Change</span>
             <p
-              className={`mt-1 text-lg font-bold sm:text-2xl ${
+              className={`mt-1 text-2xl font-bold ${
                 insufficientCash ? "text-red-600" : "text-green-700"
               }`}
             >
@@ -157,15 +157,15 @@ export default function Cart({
         </div>
 
         {paymentMethod !== "Cash" ? (
-          <div className="min-w-0 max-w-full overflow-hidden rounded-lg bg-gray-50 p-2 sm:p-3">
-            <label className="block min-w-0 text-sm font-medium text-gray-700">
+          <div className="rounded-lg bg-gray-50 p-3">
+            <label className="block text-sm font-medium text-gray-700">
               Reference Number{" "}
               <span className="font-normal text-gray-500">(Optional)</span>
               <input
                 type="text"
                 value={referenceNumber}
                 onChange={(event) => onReferenceNumberChange(event.target.value)}
-                className="mt-1 block min-w-0 max-w-full w-full rounded-lg border border-gray-300 px-2 py-1.5 text-base text-gray-900 sm:px-3 sm:py-2"
+                className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-base text-gray-900"
                 placeholder="Enter reference number"
               />
             </label>
@@ -178,21 +178,21 @@ export default function Cart({
             type="text"
             value={customerName}
             onChange={(event) => onCustomerNameChange(event.target.value)}
-            className="mt-1 block min-w-0 max-w-full w-full rounded-lg border border-gray-300 px-2 py-1.5 text-base text-gray-900 sm:px-3 sm:py-2"
+            className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-base text-gray-900"
             placeholder="Enter customer name"
           />
         </label>
 
         <div className="flex items-center justify-between">
-          <span className="text-base font-semibold text-gray-700 sm:text-lg">Total</span>
-          <span className="text-xl font-bold text-gray-900 sm:text-3xl">{formatPrice(totalCents)}</span>
+          <span className="text-lg font-semibold text-gray-700">Total</span>
+          <span className="text-3xl font-bold text-gray-900">{formatPrice(totalCents)}</span>
         </div>
 
         <button
           type="button"
           onClick={onSubmit}
           disabled={isSaving || items.length === 0 || insufficientCash}
-          className="w-full rounded-xl bg-slate-900 px-4 py-1.5 text-base font-bold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300 sm:py-4 sm:text-xl"
+          className="w-full rounded-xl bg-green-600 px-4 py-4 text-xl font-bold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-gray-300"
         >
           {isSaving ? "Saving..." : "Save Sale"}
         </button>

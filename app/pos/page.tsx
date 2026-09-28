@@ -156,9 +156,9 @@ export default function PosPage() {
   }
 
   return (
-    <main className="h-[calc(100dvh-5rem)] max-h-[calc(100dvh-5rem)] overflow-hidden bg-slate-100 p-4 text-slate-950 sm:p-6">
-      <div className="mx-auto flex h-full min-h-0 max-w-7xl flex-col">
-        <header className="mb-4 flex shrink-0 items-center justify-between">
+    <main className="min-h-screen bg-slate-100 p-4 text-slate-950 sm:p-6">
+      <div className="mx-auto max-w-7xl">
+        <header className="mb-4 flex items-center justify-between">
           <div>
             <p className="text-sm font-semibold text-slate-500">Gicho POS</p>
             <h1 className="text-2xl font-bold">Sell</h1>
@@ -177,8 +177,8 @@ export default function PosPage() {
           ) : null}
         </header>
 
-        <div className="grid min-h-0 min-w-0 flex-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)] gap-3 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:grid-rows-1 lg:gap-4">
-          <section className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-xl bg-slate-50">
+        <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
+          <section className="rounded-xl bg-slate-50">
             <h2 className="mb-3 text-xl font-bold text-slate-950">Products</h2>
             {isLoadingProducts ? (
               <div className="flex flex-1 items-center justify-center text-sm font-semibold text-slate-600">
