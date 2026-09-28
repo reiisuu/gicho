@@ -55,38 +55,47 @@ export default function Cart({
         <span className="text-sm text-gray-500">{items.length} item types</span>
       </div>
 
-      <div className="custom-scrollbar min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+      <div className="custom-scrollbar min-h-0 flex-1 space-y-4 overflow-y-auto pr-1">
         {items.length === 0 ? (
-          <p className="py-8 text-center text-gray-500">Tap a product to add it.</p>
+          <p className="py-10 text-center text-base text-gray-500">
+            Tap a product to add it.
+          </p>
         ) : (
           items.map((item) => (
-            <div key={item.id} className="flex items-center justify-between gap-3">
+            <div
+              key={item.id}
+              className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 shadow-sm sm:gap-4 sm:p-4"
+            >
               <div className="min-w-0 flex-1">
-                <p className="truncate font-medium text-gray-900">{item.name}</p>
-                <p className="text-sm text-gray-500">
+                <p className="truncate text-base font-semibold text-gray-900 sm:text-lg">
+                  {item.name}
+                </p>
+                <p className="mt-1 text-sm text-gray-600 sm:text-base">
                   {formatPrice(item.priceCents)} each
                 </p>
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex shrink-0 items-center gap-2">
                 <button
                   type="button"
                   onClick={() => onDecrement(item.id)}
-                  className="h-8 w-8 rounded-lg bg-gray-100 text-base font-bold"
+                  className="h-10 w-10 rounded-lg bg-white text-xl font-bold text-gray-900 shadow-sm ring-1 ring-slate-200"
                   aria-label={`Decrease ${item.name}`}
                 >
                   -
                 </button>
-                <span className="w-4 text-center text-sm font-semibold">{item.quantity}</span>
+                <span className="w-6 text-center text-base font-bold text-gray-900">
+                  {item.quantity}
+                </span>
                 <button
                   type="button"
                   onClick={() => onIncrement(item.id)}
-                  className="h-8 w-8 rounded-lg bg-gray-900 text-base font-bold text-white"
+                  className="h-10 w-10 rounded-lg bg-gray-900 text-xl font-bold text-white shadow-sm"
                   aria-label={`Increase ${item.name}`}
                 >
                   +
                 </button>
               </div>
-              <span className="w-20 text-right font-semibold">
+              <span className="w-24 shrink-0 text-right text-base font-bold text-gray-900 sm:text-lg">
                 {formatPrice(item.priceCents * item.quantity)}
               </span>
             </div>
