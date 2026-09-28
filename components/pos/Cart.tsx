@@ -49,7 +49,7 @@ export default function Cart({
     paymentMethod === "Cash" && amountTenderedCents < totalCents;
 
   return (
-    <section className="flex h-full flex-col rounded-xl bg-white p-4 shadow-sm">
+    <section className="flex h-full min-w-0 max-w-full flex-col overflow-hidden rounded-xl bg-white p-4 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-xl font-bold text-gray-900">Current Order</h2>
         <span className="text-sm text-gray-500">{items.length} item types</span>
@@ -64,7 +64,7 @@ export default function Cart({
           items.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 shadow-sm"
+              className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 shadow-sm sm:gap-4"
             >
               <div className="min-w-0 flex-1">
                 <p className="truncate text-lg font-semibold text-gray-900">
@@ -95,7 +95,7 @@ export default function Cart({
                   +
                 </button>
               </div>
-              <span className="w-24 text-right text-lg font-bold text-gray-900">
+              <span className="min-w-0 text-right text-lg font-bold text-gray-900">
                 {formatPrice(item.priceCents * item.quantity)}
               </span>
             </div>

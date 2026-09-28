@@ -177,8 +177,8 @@ export default function PosPage() {
           ) : null}
         </header>
 
-        <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-          <section className="rounded-xl bg-slate-50">
+        <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+          <section className="min-w-0 rounded-xl bg-slate-50">
             <h2 className="mb-3 text-xl font-bold text-slate-950">Products</h2>
             {isLoadingProducts ? (
               <div className="flex flex-1 items-center justify-center text-sm font-semibold text-slate-600">
