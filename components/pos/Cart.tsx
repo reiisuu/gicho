@@ -8,11 +8,12 @@ type CartProps = {
   paymentMethod: PaymentMethod;
   amountTenderedCents: number;
   referenceNumber: string;
+  customerName: string;
   totalCents: number;
   onPaymentMethodChange: (method: PaymentMethod) => void;
   onAmountTenderedChange: (amountCents: number) => void;
-  onQuickCash: (amountCents: number, mode: "add" | "exact") => void;
   onReferenceNumberChange: (referenceNumber: string) => void;
+  onCustomerNameChange: (customerName: string) => void;
   onIncrement: (productId: string) => void;
   onDecrement: (productId: string) => void;
   onSubmit: () => void;
@@ -32,11 +33,12 @@ export default function Cart({
   paymentMethod,
   amountTenderedCents,
   referenceNumber,
+  customerName,
   totalCents,
   onPaymentMethodChange,
   onAmountTenderedChange,
-  onQuickCash,
   onReferenceNumberChange,
+  onCustomerNameChange,
   onIncrement,
   onDecrement,
   onSubmit,
@@ -145,34 +147,6 @@ export default function Cart({
           </div>
         </div>
 
-        {paymentMethod === "Cash" ? (
-          <div>
-            <p className="mb-1 text-xs font-bold text-slate-700 sm:mb-2 sm:text-sm">Quick Cash</p>
-            <div className="grid min-w-0 grid-cols-2 gap-1 sm:grid-cols-4 sm:gap-2">
-              {[
-                { label: "Exact", amount: totalCents },
-                { label: "₱100", amount: 10_000 },
-                { label: "₱500", amount: 50_000 },
-                { label: "₱1000", amount: 100_000 },
-              ].map((option) => (
-                <button
-                  key={option.label}
-                  type="button"
-                  onClick={() =>
-                    onQuickCash(
-                      option.amount,
-                      option.label === "Exact" ? "exact" : "add",
-                    )
-                  }
-                  className="min-h-7 min-w-0 max-w-full overflow-hidden text-ellipsis whitespace-nowrap rounded-lg border-2 border-emerald-200 bg-emerald-50 px-2 py-0.5 text-xs font-extrabold text-emerald-900 hover:bg-emerald-100 active:scale-95 sm:min-h-12 sm:rounded-xl sm:py-2 sm:text-sm"
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        ) : null}
-
         {paymentMethod !== "Cash" ? (
           <div className="min-w-0 max-w-full overflow-hidden rounded-lg bg-gray-50 p-2 sm:p-3">
             <label className="block min-w-0 text-sm font-medium text-gray-700">
@@ -188,6 +162,17 @@ export default function Cart({
             </label>
           </div>
         ) : null}
+
+        <label className="block text-sm font-medium text-gray-700">
+          Customer Name <span className="font-normal text-gray-500">(Optional)</span>
+          <input
+            type="text"
+            value={customerName}
+            onChange={(event) => onCustomerNameChange(event.target.value)}
+            className="mt-1 block min-w-0 max-w-full w-full rounded-lg border border-gray-300 px-2 py-1.5 text-base text-gray-900 sm:px-3 sm:py-2"
+            placeholder="Enter customer name"
+          />
+        </label>
 
         <div className="flex items-center justify-between">
           <span className="text-base font-semibold text-gray-700 sm:text-lg">Total</span>

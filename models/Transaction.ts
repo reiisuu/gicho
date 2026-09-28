@@ -92,6 +92,10 @@ const transactionSchema = new Schema({
     type: String,
     trim: true,
   },
+  customerName: {
+    type: String,
+    trim: true,
+  },
   isDeleted: {
     type: Boolean,
     default: false,

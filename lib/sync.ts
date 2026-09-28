@@ -17,6 +17,7 @@ export type SalePayload = {
   amountTenderedCents?: number;
   changeCents?: number;
   referenceNumber?: string;
+  customerName?: string;
   source: "app" | "import";
 };
 

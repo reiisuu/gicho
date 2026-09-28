@@ -29,6 +29,7 @@ export default function PosPage() {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("Cash");
   const [amountTenderedCents, setAmountTenderedCents] = useState(0);
   const [referenceNumber, setReferenceNumber] = useState("");
+  const [customerName, setCustomerName] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [status, setStatus] = useState("");
@@ -121,6 +122,7 @@ export default function PosPage() {
         : referenceNumber.trim()
           ? { referenceNumber: referenceNumber.trim() }
           : {}),
+      ...(customerName.trim() ? { customerName: customerName.trim() } : {}),
       source: "app",
     };
 
@@ -148,6 +150,7 @@ export default function PosPage() {
       setItems([]);
       setAmountTenderedCents(0);
       setReferenceNumber("");
+      setCustomerName("");
       setIsSaving(false);
     }
   }
@@ -191,15 +194,12 @@ export default function PosPage() {
             paymentMethod={paymentMethod}
             amountTenderedCents={amountTenderedCents}
             referenceNumber={referenceNumber}
+            customerName={customerName}
             totalCents={totalCents}
             onPaymentMethodChange={setPaymentMethod}
             onAmountTenderedChange={setAmountTenderedCents}
-            onQuickCash={(amountCents, mode) =>
-              setAmountTenderedCents((current) =>
-                mode === "exact" ? amountCents : current + amountCents,
-              )
-            }
             onReferenceNumberChange={setReferenceNumber}
+            onCustomerNameChange={setCustomerName}
             onIncrement={(id) => changeQuantity(id, 1)}
             onDecrement={(id) => changeQuantity(id, -1)}
             onSubmit={saveSale}

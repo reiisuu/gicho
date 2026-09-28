@@ -17,6 +17,7 @@ type Transaction = {
   amountTenderedCents?: number;
   changeCents?: number;
   referenceNumber?: string;
+  customerName?: string;
   isDeleted: boolean;
   deletedAt?: string | null;
 };
@@ -145,6 +146,11 @@ export default function HistoryPage() {
                       )}{" "}
                       · {transaction.paymentMethod}
                     </p>
+                    {transaction.customerName ? (
+                      <p className="text-sm font-semibold text-slate-700">
+                        Customer: {transaction.customerName}
+                      </p>
+                    ) : null}
                   </div>
                   <p className="text-xl font-bold">
                     {formatMoney(transaction.totalCents)}

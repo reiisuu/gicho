@@ -58,6 +58,7 @@ export async function GET(request: Request) {
         amountTenderedCents: transaction.amountTenderedCents,
         changeCents: transaction.changeCents,
         referenceNumber: transaction.referenceNumber,
+        customerName: transaction.customerName,
         isDeleted: transaction.isDeleted,
         deletedAt: transaction.deletedAt?.toISOString() ?? null,
       })),

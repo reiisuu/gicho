@@ -19,6 +19,7 @@ function isSalePayload(value: unknown): value is SalePayload {
     ) &&
     (sale.referenceNumber === undefined ||
       typeof sale.referenceNumber === "string") &&
+    (sale.customerName === undefined || typeof sale.customerName === "string") &&
     (sale.source === "app" || sale.source === "import")
   );
 }
