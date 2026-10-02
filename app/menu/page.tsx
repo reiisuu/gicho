@@ -16,6 +16,12 @@ type ProductForm = {
   price: string;
 };
 
+type ProductUpdate = {
+  name: string;
+  category: string;
+  priceCents: number;
+};
+
 const emptyForm: ProductForm = { name: "", category: "", price: "" };
 
 function formatPrice(cents: number) {
@@ -33,7 +39,7 @@ function priceToCents(value: string) {
 export default function MenuPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [form, setForm] = useState<ProductForm>(emptyForm);
-  const [editingPrice, setEditingPrice] = useState<Record<string, string>>({});
+  const [editingProducts, setEditingProducts] = useState<Record<string, ProductForm>>({});
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -103,24 +109,47 @@ export default function MenuPage() {
       });
       if (!response.ok) {
         setError("Unable to update product.");
-        return;
+        return false;
       }
       setStatus("Product updated.");
       await loadProducts();
+      return true;
     } catch {
       setError("Unable to update product.");
+      return false;
     } finally {
       setUpdatingId("");
     }
   }
 
-  async function updatePrice(product: Product) {
-    const priceCents = priceToCents(editingPrice[product.id] ?? "");
+  async function updateProductDetails(product: Product) {
+    const editForm = editingProducts[product.id] ?? {
+      name: product.name,
+      category: product.category,
+      price: (product.priceCents / 100).toFixed(2),
+    };
+    const priceCents = priceToCents(editForm.price);
+    const updates: ProductUpdate = {
+      name: editForm.name.trim(),
+      category: editForm.category.trim(),
+      priceCents,
+    };
+
+    if (!updates.name || !updates.category) {
+      setError("Enter a name, category, and valid price.");
+      return;
+    }
     if (!Number.isInteger(priceCents)) {
       setError("Enter a valid price.");
       return;
     }
-    await updateProduct(product.id, { priceCents });
+    if (await updateProduct(product.id, updates)) {
+      setEditingProducts((current) => {
+        const next = { ...current };
+        delete next[product.id];
+        return next;
+      });
+    }
   }
 
   return (
@@ -185,29 +214,67 @@ export default function MenuPage() {
             {!isLoading && products.length === 0 ? <p>No products yet.</p> : null}
             {products.map((product) => (
               <article key={product.id} className="rounded-xl bg-white p-4 shadow-sm">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <h3 className="font-bold">{product.name}</h3>
-                    <p className="text-sm text-gray-500">{product.category}</p>
-                    <p className="text-lg font-semibold">{formatPrice(product.priceCents)}</p>
-                  </div>
-                  <div className="flex flex-wrap items-end gap-2">
-                    <label className="text-sm font-medium">
-                      New price
+                <div className="mb-4">
+                  <h3 className="font-bold">{product.name}</h3>
+                  <p className="text-sm text-gray-500">{product.category}</p>
+                  <p className="text-lg font-semibold">{formatPrice(product.priceCents)}</p>
+                </div>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+                  {(["name", "category"] as const).map((field) => (
+                    <label key={field} className="text-sm font-medium sm:flex-1">
+                      {field === "name" ? "Product name" : "Category"}
                       <input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={editingPrice[product.id] ?? (product.priceCents / 100).toFixed(2)}
-                        onChange={(event) =>
-                          setEditingPrice({ ...editingPrice, [product.id]: event.target.value })
+                        value={
+                          editingProducts[product.id]?.[field] ??
+                          product[field]
                         }
-                        className="mt-1 block w-32 rounded-lg border border-gray-300 px-3 py-2"
+                        onChange={(event) =>
+                          setEditingProducts((current) => ({
+                            ...current,
+                            [product.id]: {
+                              ...(current[product.id] ?? {
+                                name: product.name,
+                                category: product.category,
+                                price: (product.priceCents / 100).toFixed(2),
+                              }),
+                              [field]: event.target.value,
+                            },
+                          }))
+                        }
+                        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
                       />
                     </label>
+                  ))}
+                  <label className="text-sm font-medium">
+                    Price (₱)
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={
+                        editingProducts[product.id]?.price ??
+                        (product.priceCents / 100).toFixed(2)
+                      }
+                      onChange={(event) =>
+                        setEditingProducts((current) => ({
+                          ...current,
+                          [product.id]: {
+                            ...(current[product.id] ?? {
+                              name: product.name,
+                              category: product.category,
+                              price: (product.priceCents / 100).toFixed(2),
+                            }),
+                            price: event.target.value,
+                          },
+                        }))
+                      }
+                      className="mt-1 block w-32 rounded-lg border border-gray-300 px-3 py-2"
+                    />
+                  </label>
+                  <div className="flex flex-wrap gap-2">
                     <button
                       type="button"
-                      onClick={() => void updatePrice(product)}
+                      onClick={() => void updateProductDetails(product)}
                       disabled={updatingId === product.id}
                       className="rounded-lg bg-slate-900 px-3 py-2 font-semibold text-white disabled:cursor-wait disabled:opacity-60"
                     >
@@ -217,7 +284,7 @@ export default function MenuPage() {
                           Updating...
                         </span>
                       ) : (
-                        "Update Price"
+                        "Update Product"
                       )}
                     </button>
                     <button

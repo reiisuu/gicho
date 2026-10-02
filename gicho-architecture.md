@@ -117,3 +117,17 @@ Internet connectivity in the store can drop. The system must never block a sale.
   sync.ts                     <- Offline queue localStorage logic
   utils.ts                    <- Cents to PHP formatting
 middleware.ts                 <- JWT route protection
+
+
+# 10/02/26 - To fix
+1. Allow user to update the whole product in the menu. Current system can only update the price. The user should be able to update the name, price, category, etc.
+2. Add categorization buttons in Cashier / POS screen. The client requested to view sorting my categorization for ease of use. Use the existing categories as the categorization buttons.
+3. For ease of use, the category should be a dropdown list where in the user can choose the client from the list instead of typing it manual. This is to normalize the categorization of the products. Dropdown list: Ulam, Drink, Others, (add more if necessary)
+4. Major UI Change: The user is often scrolling up and down with the POS screen just to look for the product and enter details of the sale. The client requested that there should be a shopping cart toast similar to delivery services like Foodpanda / Grab. Upon clicking the shopping cart toast, there should be a popup wherein it will serve as the POS sale. Separate the two parts of the POS: the Items Menu and the Cashier Menu (cashier should be a popup / toast) so the user will not scroll up and down.
+5. UI for Cashier / POS should not overflow. Oftentimes, if there are menu items being added, the whole container is being adjusted, making the screen longer. Instead of doing that, it should be contained and just add a scrolling function so that the user wouldn't scroll too much.
+6. Add a search function for the items. The user spends a lot of time finding the item whenever there is a sale. To cut down the time, the search function should identify items depending on the input of the user. 
+7. Color Changes: The color design of the current system is very monotone. The client likes the minimalism and simplicity of it but it is not that intuitive due to the abscence of colors. An example would be adding quantity to the items. The minus and plus buttons are not visible enough due to the monotone color, confusing the user if it is add or subtract item. Make the colors much more distinguised so that it is intuitive to the user. Add colors like red and green for buttons.
+8. Add popups / toast: This should occur when adding items so that the user is not blind whenever adding items. There should be an animation wherein the item is being added to cart so that the user / client is getting real-time notification about the item being added.
+9. Make sure that nothing is overflowing for all screens. 
+10. @Menu screen: Add product part is too big. The actual product list should be bigger so the user / client can see all of the active items.
+11. Normalize data inputs. If the name's first letter is not capitalized, ensure that it is capitalized. If the name's are connected together (no spaces, etc.), ensure that there is a space between them to minimize updating frequency.
