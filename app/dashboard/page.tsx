@@ -81,9 +81,9 @@ export default function DashboardPage() {
   }, [timeframe]);
 
   return (
-    <main className="min-h-screen bg-slate-100 p-4 text-slate-950 sm:p-6">
-      <div className="mx-auto max-w-6xl space-y-5">
-        <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <main className="h-[calc(100dvh-5rem)] max-h-[calc(100dvh-5rem)] overflow-hidden bg-slate-100 p-4 text-slate-950 sm:p-6">
+      <div className="mx-auto flex h-full min-h-0 max-w-6xl flex-col gap-5">
+        <header className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold text-slate-500">Gicho POS</p>
             <h1 className="text-3xl font-bold">Dashboard</h1>
@@ -104,17 +104,18 @@ export default function DashboardPage() {
           </label>
         </header>
 
-        {error ? <p className="rounded-lg bg-red-50 p-3 text-red-700">{error}</p> : null}
-        {isLoading && analytics ? (
-          <p className="flex items-center text-sm font-semibold text-slate-600">
-            <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-slate-900" />
-            Updating dashboard...
-          </p>
-        ) : null}
-        {isLoading && !analytics ? <p className="flex items-center font-semibold text-slate-600"><span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-slate-900" />Loading analytics...</p> : null}
+        <div className="custom-scrollbar min-h-0 flex-1 space-y-5 overflow-y-auto pr-1">
+          {error ? <p className="rounded-lg bg-red-50 p-3 text-red-700">{error}</p> : null}
+          {isLoading && analytics ? (
+            <p className="flex items-center text-sm font-semibold text-slate-600">
+              <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-slate-900" />
+              Updating dashboard...
+            </p>
+          ) : null}
+          {isLoading && !analytics ? <p className="flex items-center font-semibold text-slate-600"><span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-slate-900" />Loading analytics...</p> : null}
 
-        {analytics ? (
-          <>
+          {analytics ? (
+            <>
             <section className="grid gap-3 sm:grid-cols-2">
               <div className="rounded-xl bg-white p-5 shadow-sm">
                 <p className="text-sm font-medium text-gray-500">Total Revenue</p>
@@ -133,7 +134,7 @@ export default function DashboardPage() {
               </div>
             </section>
 
-            <section className="rounded-xl bg-white p-4 shadow-sm">
+            <section className="min-w-0 rounded-xl bg-white p-4 shadow-sm">
               <h2 className="mb-4 text-xl font-bold">Revenue Trends</h2>
               <div className="h-72 w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -165,7 +166,7 @@ export default function DashboardPage() {
               </div>
             </section>
 
-            <section className="rounded-xl bg-white p-4 shadow-sm">
+            <section className="min-w-0 rounded-xl bg-white p-4 shadow-sm">
               <h2 className="mb-4 text-xl font-bold">Top Selling Items</h2>
               {analytics.topItems.length === 0 ? (
                 <p className="text-gray-500">No sales for this timeframe.</p>
@@ -188,8 +189,9 @@ export default function DashboardPage() {
                 </div>
               )}
             </section>
-          </>
-        ) : null}
+            </>
+          ) : null}
+        </div>
       </div>
     </main>
   );

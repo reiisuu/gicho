@@ -70,7 +70,10 @@ export async function POST(request: Request) {
 
   if (!isValidProductBody(body)) {
     return NextResponse.json(
-      { error: "Name, category, and a non-negative integer priceCents are required" },
+      {
+        error:
+          "Name, category, and a non-negative integer priceCents are required",
+      },
       { status: 400 },
     );
   }

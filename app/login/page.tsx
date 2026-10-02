@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
+import { clearPosDraft } from "@/lib/pos-draft";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -31,6 +32,7 @@ export default function LoginPage() {
         return;
       }
 
+      clearPosDraft();
       router.push("/pos");
       router.refresh();
     } catch {
@@ -41,7 +43,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100 p-6">
+    <main className="flex min-h-screen items-center justify-center bg-gray-100 p-4 sm:p-6">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-sm space-y-6 rounded-2xl bg-white p-8 shadow-md"
@@ -92,7 +94,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-lg bg-gray-900 px-4 py-3 text-lg font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full rounded-lg bg-green-600 px-4 py-3 text-lg font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? "Signing in..." : "Sign in"}
         </button>

@@ -24,7 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full pb-20 flex flex-col">
+      <body className="flex min-h-full flex-col pb-[calc(5rem+env(safe-area-inset-bottom))]">
         {children}
         <BottomNavigation />
       </body>

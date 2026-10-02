@@ -20,16 +20,25 @@ const formatPrice = (cents: number) =>
 
 export default function ProductGrid({ products, onAdd }: ProductGridProps) {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
   const categories = useMemo(
     () => Array.from(new Set(products.map((product) => product.category))),
     [products],
   );
   const visibleProducts = useMemo(
-    () =>
-      selectedCategory === "All"
-        ? products
-        : products.filter((product) => product.category === selectedCategory),
-    [products, selectedCategory],
+    () => {
+      const query = searchQuery.trim().toLocaleLowerCase();
+      return products.filter((product) => {
+        const matchesCategory =
+          selectedCategory === "All" || product.category === selectedCategory;
+        const matchesSearch =
+          !query ||
+          product.name.toLocaleLowerCase().includes(query) ||
+          product.category.toLocaleLowerCase().includes(query);
+        return matchesCategory && matchesSearch;
+      });
+    },
+    [products, searchQuery, selectedCategory],
   );
 
   if (products.length === 0) {
@@ -42,6 +51,20 @@ export default function ProductGrid({ products, onAdd }: ProductGridProps) {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
+      <div className="flex shrink-0 justify-center">
+        <label className="sr-only" htmlFor="pos-product-search">
+          Search products
+        </label>
+        <input
+          id="pos-product-search"
+          type="search"
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
+          placeholder="Search products"
+          className="w-full max-w-xs rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
+        />
+      </div>
+
       <div className="custom-scrollbar flex shrink-0 gap-2 overflow-x-auto pb-1">
         {["All", ...categories].map((category) => (
           <button
@@ -51,8 +74,8 @@ export default function ProductGrid({ products, onAdd }: ProductGridProps) {
             aria-pressed={selectedCategory === category}
             className={`whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold transition ${
               selectedCategory === category
-                ? "bg-slate-900 text-white"
-                : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-100"
+                ? "bg-green-600 text-white"
+                : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-green-50"
             }`}
           >
             {category}
@@ -72,7 +95,7 @@ export default function ProductGrid({ products, onAdd }: ProductGridProps) {
                 key={product.id}
                 type="button"
                 onClick={() => onAdd(product)}
-                className="min-h-28 rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-slate-900 active:scale-95"
+                className="min-h-28 rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-green-500 hover:bg-green-50 active:scale-95"
               >
                 <span className="block font-semibold text-slate-950">{product.name}</span>
                 <span className="mt-2 block text-lg font-bold text-slate-800">
